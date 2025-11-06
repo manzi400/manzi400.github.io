@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Richard Manzi | Portfolio</title>
+  <style>
+    :root {
+      --bg-light: #f9fafb;
+      --bg-dark: #0f172a;
+      --text-light: #111827;
+      --text-dark: #e5e7eb;
+      --accent: #3b82f6;
+    }
+    [data-theme="dark"] {
+      --bg-light: var(--bg-dark);
+      --text-light: var(--text-dark);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      color: white;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: #dbeafe;
+      font-size: 1.1rem;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+    h2 {
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    section {
+      margin-bottom: 2.5rem;
+    }
+    .project {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .project:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    .project a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #9ca3af;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    .toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Richard Manzi</h1>
+    <p>Software Developer • Tech Enthusiast • Lifelong Learner</p>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>Hello 👋 I'm Richard, a software developer passionate about clean code, elegant design, and solving real-world problems using technology. I focus on simplicity, performance, and growth through learning.</p>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <ul>
+        <li>💻 Frontend: HTML, CSS, JavaScript</li>
+        <li>⚙️ Backend: Python, Node.js</li>
+        <li>🧠 Tools: Git, GitHub, VS Code</li>
+        <li>🎨 Design: Figma, UI/UX Basics</li>
+      </ul>
+    </section>
+
+    <section id="projects">
+      <h2>My GitHub Projects</h2>
+      <div id="repoList">Loading projects...</div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>📧 <a href="mailto:richard@example.com">richard@example.com</a></p>
+      <p>🔗 <a href="https://linkedin.com/in/richardmanzi" target="_blank">linkedin.com/in/richardmanzi</a></p>
+      <p>💼 <a href="https://github.com/manzi400" target="_blank">github.com/manzi400</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Richard Manzi | Built with ❤️ & GitHub Pages</p>
+  </footer>
+
+  <button class="toggle-btn" onclick="toggleTheme()">🌓</button>
+
+  <script>
+    // Light/Dark mode toggle
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme');
+      document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Fetch your GitHub repos automatically
+    async function loadRepos() {
+      const container = document.getElementById('repoList');
+      container.innerHTML = "<p>Loading...</p>";
+      try {
+        const res = await fetch('https://api.github.com/users/manzi400/repos?sort=updated');
+        const repos = await res.json();
+
+        container.innerHTML = "";
+        repos.forEach(repo => {
+          if (!repo.fork) {
+            const div = document.createElement('div');
+            div.className = "project";
+            div.innerHTML = `
+              <h3>${repo.name}</h3>
+              <p>${repo.description || "No description provided."}</p>
+              <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+            `;
+            container.appendChild(div);
+          }
+        });
+      } catch (err) {
+        container.innerHTML = "<p>❌ Failed to load projects.</p>";
+      }
+    }
+
+    loadRepos();
+  </script>
+</body>
+</html>
